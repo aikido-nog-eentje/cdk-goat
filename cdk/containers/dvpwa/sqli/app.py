@@ -22,7 +22,10 @@ def init():
         app,
         loader=PackageLoader("sqli", "templates"),
         context_processors=[csrf_processor, auth_user_processor],
-        autoescape=False,
+        # Security fix: Enable autoescape to prevent XSS attacks.
+        # This ensures all user-controlled data is HTML-escaped before
+        # rendering in templates, mitigating stored XSS vulnerabilities.
+        autoescape=True,
     )
     setup_database(app)
     setup_routes(app)
